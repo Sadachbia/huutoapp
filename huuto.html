@@ -1,0 +1,53 @@
+<HTML>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  $("#doSearch").click(function(){
+    var postalCode = $('#postalCodeField').val();
+    var category = $('#categoryField').val();
+    var searchUrl = "http://api.huuto.net/1.1/items?area=" + postalCode + "&&words=" + category;
+
+    $.ajax({
+        url: searchUrl
+    }).then(function(data) {
+       $('p.result').text(data.totalCount);
+       console.log(data.totalCount);
+
+       var itemArray = data.items;
+
+       $("#itemtable").empty();
+       itemArray.forEach( function(item) {
+          $("#itemtable").append("<TR><TD>"+item.id+"</TD><TD>"+item.title+"</TD><TD>"+item.seller+"</TD></TR>");
+      });
+
+    });
+
+  });
+
+});
+
+</script>
+</head>
+
+<BODY>
+ <div>
+   <p class="totalCount">count is </p>
+ </div>
+ <div> <p class="result">result is </p> </div>
+
+ <form>
+  <input type="text" id="postalCodeField"><br>
+  <input type="text" id="categoryField"><br>
+ </form>
+
+ <button id="doSearch">Search</button>
+
+ <TABLE id="itemtable" border="1">
+ </TABLE>
+
+
+</BODY>
+</HTML>
+
